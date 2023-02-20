@@ -8,12 +8,7 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker.min.css" />
-
-    <style>
-      label{margin-left: 20px;}
-      #datepicker{width:180px;}
-      #datepicker > span:hover{cursor: pointer;}
-    </style>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
 </head>
 
 <body>
