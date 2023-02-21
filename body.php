@@ -42,61 +42,20 @@
                 </span>
             </div>
         </div>
-        <table class="table">
+        <table class="table" id="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Valor</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Origen</th>
-                    <th scope="col"></th>
+                    <th scope="col">
+                        <button type="button" id="reload" class="btn btn-success">
+                            <i class="fa-solid fa-rotate-right"></i></i>
+                        </button></i>
+                    </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>29149.08</td>
-                    <td>09-02-2021</td>
-                    <td>miindicador.cl</td>
-                    <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#update-register">
-                            <i class="fa-sharp fa-solid fa-pencil" ></i>
-                        </button>
-                        <button type="button" class="btn btn-danger">
-                            <i class="fa-sharp fa-solid fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>
-                        <button type="button" class="btn btn-primary">
-                            <i class="fa-sharp fa-solid fa-pencil"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger">
-                            <i class="fa-sharp fa-solid fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    <td>
-                        <button type="button" class="btn btn-primary">
-                            <i class="fa-sharp fa-solid fa-pencil"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger">
-                            <i class="fa-sharp fa-solid fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
         </table>
     </div>
 
@@ -124,36 +83,40 @@
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-           
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h4>Actualizar registro historico UF</h4>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="valor-en-pesos" placeholder="Valor en pesos">
                     </div>
-                    <div class="modal-body">
-                        <h4>Actualizar registro historico UF</h4>
-                        <div class="form-group">
-                            <input type="email" class="form-control" id="valor-en-pesos" placeholder="Valor en pesos">
-                        </div>
-                        <div id="datepicker-update" class="input-group date mb-3" data-date-format="dd-mm-yyyy">
-                            <input class="form-control" type="text" readonly />
-                            <span class="input-group-addon">
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="origen" placeholder="Origen dato">
-                        </div>
+                    <div id="datepicker-update" class="input-group date mb-3" data-date-format="dd-mm-yyyy">
+                        <input class="form-control" type="text" readonly />
+                        <span class="input-group-addon">
+                        </span>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Actualizar</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Descartar</button>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="origen" placeholder="Origen dato">
                     </div>
-          
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Actualizar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Descartar</button>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
 
 
-
+<!--
+<button id="btnAddItem">Add</button>
+<table id="Table">
+</table>
+-->
 
 
 <script>
@@ -181,23 +144,47 @@
             todayHighlight: true,
         }).datepicker('update', new Date());
     });
-    $(function() { 
+    $(function () {
 
-    $('#save_task').on('submit', function(e) { 
-        e.preventDefault(); 
-        var data = $(this).serializeArray();
-        console.log(data); 
-        $.ajax({
-            url: 'save_task.php',
-            type: 'post',
-            data: data,
-            success: function(result) {
-                alert(result);
-            },
-            error: function() {
-                alert('Error!!!');
-            }
+        $('#save_task').on('submit', function (e) {
+            e.preventDefault();
+            var data = $(this).serializeArray();
+            console.log(data);
+            $.ajax({
+                url: 'save_task.php',
+                type: 'post',
+                data: data,
+                success: function (result) {
+                    alert(result);
+                },
+                error: function () {
+                    alert('Error!!!');
+                }
+            });
         });
     });
-});
+
+    const table = document.getElementById('table');
+    let numItems = 0;
+    document.getElementById("reload").addEventListener("click", function () {
+        numItems++;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+                <tr>
+                    <th scope="row">${numItems}</th>
+                    <td>29149.08</td>
+                    <td>09-02-2021</td>
+                    <td>miindicador.cl</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#update-register">
+                            <i class="fa-sharp fa-solid fa-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger">
+                            <i class="fa-sharp fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`;
+        table.appendChild(row);
+    });
 </script>
