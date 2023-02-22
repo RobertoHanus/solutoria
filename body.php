@@ -145,7 +145,6 @@
         }).datepicker('update', new Date());
     });
     $(function () {
-
         $('#save_task').on('submit', function (e) {
             e.preventDefault();
             var data = $(this).serializeArray();
@@ -164,17 +163,17 @@
         });
     });
 
-    const table = document.getElementById('table');
-    let numItems = 0;
-    document.getElementById("reload").addEventListener("click", function () {
+      
+    numItems = 0;
+    function addRow(valor, fecha, origen) {
         numItems++;
-        const row = document.createElement('tr');
+        const row = document.createElement('tr class="table_row"');
         row.innerHTML = `
                 <tr>
                     <th scope="row">${numItems}</th>
-                    <td>29149.08</td>
-                    <td>09-02-2021</td>
-                    <td>miindicador.cl</td>
+                    <td>${valor}</td>
+                    <td>${fecha}</td>
+                    <td>${origen}</td>
                     <td>
                         <button type="button" class="btn btn-primary" data-toggle="modal"
                             data-target="#update-register">
@@ -185,6 +184,26 @@
                         </button>
                     </td>
                 </tr>`;
+        const table = document.getElementById('table');
         table.appendChild(row);
-    });
+    };
+
+    function updateTableView() { 
+        $.ajax({
+                url: 'select_uf.php',
+                type: 'post',
+                success: function (result) {
+                    result_parsed = JSON.parse(result)
+                    $('#table tr.table_row').remove();
+                    result_parsed.forEach(element => {
+                        addRow(element[0],element[1],element[2]);
+                    });
+                },
+                error: function () {
+                    alert('Error!!!');
+                }
+            });
+    }
+
+    $('#reload').click(updateTableView);
 </script>
