@@ -29,7 +29,7 @@
         <div class="col-6 col-sm-4 col-md-3">
             <label>Fecha inicio: </label>
             <div id="datepicker-start" class="input-group date" data-date-format="dd-mm-yyyy">
-                <input class="form-control" type="text" readonly />
+                <input id="inicio" class="form-control" type="text" readonly />
                 <span class="input-group-addon">
                 </span>
             </div>
@@ -37,7 +37,7 @@
         <div class="col-6 col-sm-4 col-md-3 mb-2">
             <label>Fecha final: </label>
             <div id="datepicker-end" class="input-group date" data-date-format="dd-mm-yyyy">
-                <input class="form-control" type="text" readonly />
+                <input id="termino" class="form-control" type="text" readonly />
                 <span class="input-group-addon">
                 </span>
             </div>
@@ -167,9 +167,8 @@
     numItems = 0;
     function addRow(valor, fecha, origen) {
         numItems++;
-        const row = document.createElement('tr class="table_row"');
-        row.innerHTML = `
-                <tr>
+        $("#table").append(`
+                <tr class="entry">
                     <th scope="row">${numItems}</th>
                     <td>${valor}</td>
                     <td>${fecha}</td>
@@ -183,18 +182,18 @@
                             <i class="fa-sharp fa-solid fa-trash"></i>
                         </button>
                     </td>
-                </tr>`;
-        const table = document.getElementById('table');
-        table.appendChild(row);
+                </tr>`);
     };
 
-    function updateTableView() { 
+    function updateTableView() {     
         $.ajax({
                 url: 'select_uf.php',
                 type: 'post',
+                data: { inicio : $('#inicio').val(), termino : $('#termino').val() },
                 success: function (result) {
                     result_parsed = JSON.parse(result)
-                    $('#table tr.table_row').remove();
+                    $('#table tr.entry').remove();
+                    numItems=0;
                     result_parsed.forEach(element => {
                         addRow(element[0],element[1],element[2]);
                     });

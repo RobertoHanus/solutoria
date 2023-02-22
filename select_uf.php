@@ -2,8 +2,12 @@
 
 include('db.php');
 
+$inicio=$_POST['inicio'];
+$inicio = date('Y-m-d', strtotime(str_replace("/", "-", $inicio)));
+$termino=$_POST['termino'];
+$termino = date('Y-m-d', strtotime(str_replace("/", "-", $termino)));
 
-$query = "SELECT * FROM uf_entries;";
+$query = "SELECT * FROM uf_entries WHERE fecha >= '$inicio' AND fecha <= '$termino';";
 
 $result = mysqli_query($conn, $query);
 ?>
