@@ -8,5 +8,5 @@ $query = "DELETE FROM uf_entries WHERE id = $id;";
 
 mysqli_query($conn, $query);
 
-echo "BD borrada!";
+echo "Fila borrada!";
 ?>

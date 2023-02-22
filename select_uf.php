@@ -16,7 +16,7 @@ $result = mysqli_query($conn, $query);
 $all_view = array();
 while ($row = mysqli_fetch_array($result)) {
     $view_row = array();
-    array_push($view_row,$row['id'],$row['valor'],$row['fecha'],$row['origen']);
+    array_push($view_row,$row['id'],$row['valor'],date_format(date_create($row['fecha']), "d-m-Y"),$row['origen']);
     array_push($all_view, $view_row);
 }
 

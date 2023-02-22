@@ -12,7 +12,8 @@
         <form action="save_task.php" method="POST" id="save_task">
             <h4>Creador de registro historico UF</h4>
             <div class="form-group">
-                <input type="float" class="form-control" id="valor-en-pesos" name="valor" placeholder="Valor en pesos">
+                <input type="number" step="0.01" class="form-control" id="valor-en-pesos" name="valor"
+                    placeholder="Valor en pesos">
             </div>
             <div id="datepicker-create" class="input-group date mb-3" data-date-format="dd-mm-yyyy">
                 <input class="form-control" name="date" type="text" readonly />
@@ -83,29 +84,32 @@
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <h4>Actualizar registro historico UF</h4>
-                    <div class="form-group">
-                        <input type="email" class="form-control" id="valor-en-pesos" placeholder="Valor en pesos">
+                <form action="update_task.php" method="POST" id="update_task">
+                    <input id="id-updater" type="hidden" name="id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-                    <div id="datepicker-update" class="input-group date mb-3" data-date-format="dd-mm-yyyy">
-                        <input class="form-control" type="text" readonly />
-                        <span class="input-group-addon">
-                        </span>
+                    <div class="modal-body">
+                        <h4>Actualizar registro historico UF</h4>
+                        <div class="form-group">
+                            <input name="valor" id="value-updater" type="number" step="0.01" class="form-control" id="valor-en-pesos"
+                                placeholder="Valor en pesos">
+                        </div>
+                        <div id="datepicker-update" class="input-group date mb-3" data-date-format="dd-mm-yyyy">
+                            <input name="date" id="date-updater" class="form-control" type="text" readonly />
+                            <span class="input-group-addon">
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <input name="source" id="source-updater" type="text" class="form-control" id="origen"
+                                placeholder="Origen dato">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="origen" placeholder="Origen dato">
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Actualizar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Descartar</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Actualizar</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Descartar</button>
-                </div>
-
+                </form>
             </div>
         </div>
     </div>
@@ -148,7 +152,6 @@
         $('#save_task').on('submit', function (e) {
             e.preventDefault();
             var data = $(this).serializeArray();
-            console.log(data);
             $.ajax({
                 url: 'save_task.php',
                 type: 'post',
@@ -161,9 +164,25 @@
                 }
             });
         });
+        $('#update_task').on('submit', function (e) {
+            e.preventDefault();
+            $('#update-register').modal('hide');
+            var data = $(this).serializeArray();
+            $.ajax({
+                url: 'update_task.php',
+                type: 'post',
+                data: data,
+                success: function (result) {
+                    alert(result);
+                },
+                error: function () {
+                    alert('Error!!!');
+                }
+            });
+        });
     });
 
-      
+
     numItems = 0;
     function addRow(id, valor, fecha, origen) {
         numItems++;
@@ -175,7 +194,7 @@
                     <td>${origen}</td>
                     <td>
                         <button type="button" class="btn btn-primary" data-toggle="modal"
-                            data-target="#update-register">
+                            data-target="#update-register" onClick="fillUpdater(${id},${valor},'${fecha}','${origen}')">
                             <i class="fa-sharp fa-solid fa-pencil"></i>
                         </button>
                         <button type="button" class="btn btn-danger" onClick="deleteSingle(${id})">
@@ -185,23 +204,23 @@
                 </tr>`);
     };
 
-    function updateTableView() {     
+    function updateTableView() {
         $.ajax({
-                url: 'select_uf.php',
-                type: 'post',
-                data: { inicio : $('#inicio').val(), termino : $('#termino').val() },
-                success: function (result) {
-                    result_parsed = JSON.parse(result)
-                    $('#table tr.entry').remove();
-                    numItems=0;
-                    result_parsed.forEach(element => {
-                        addRow(element[0],element[1],element[2],element[3]);
-                    });
-                },
-                error: function () {
-                    alert('Error!!!');
-                }
-            });
+            url: 'select_uf.php',
+            type: 'post',
+            data: { inicio: $('#inicio').val(), termino: $('#termino').val() },
+            success: function (result) {
+                result_parsed = JSON.parse(result)
+                $('#table tr.entry').remove();
+                numItems = 0;
+                result_parsed.forEach(element => {
+                    addRow(element[0], element[1], element[2], element[3]);
+                });
+            },
+            error: function () {
+                alert('Error!!!');
+            }
+        });
     }
 
     $('#reload').click(updateTableView);
@@ -211,27 +230,36 @@
         $.ajax({
             url: 'delete_all.php',
             type: 'post',
-            success: function(result) {
+            success: function (result) {
                 alert(result);
             },
-            error: function() {
+            error: function () {
                 alert('Error!!!');
             }
         });
     }
 
+    $('#delete-all').click(deleteAll);
+
     function deleteSingle(id) {
         $.ajax({
-            url:'delete_single.php',
+            url: 'delete_single.php',
             type: 'post',
-            data: { id : id},
-            success: function(result) {
+            data: { id: id },
+            success: function (result) {
                 alert(result);
             },
-            error: function() {
+            error: function () {
                 alert('Error!!!');
             }
         });
+    }
+
+    function fillUpdater(id, valor, fecha, origen) {
+        $('#id-updater').val(id);
+        $('#value-updater').val(valor);
+        $('#date-updater').val(fecha);
+        $('#source-updater').val(origen);
     }
 
 </script>
