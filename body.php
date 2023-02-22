@@ -71,7 +71,7 @@
                     <p>¿Está seguro de borrar toda la base de datos?.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Sí</button>
+                    <button id="delete-all" type="button" class="btn btn-danger" data-dismiss="modal">Sí</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                 </div>
             </div>
@@ -205,4 +205,20 @@
     }
 
     $('#reload').click(updateTableView);
+
+
+    function deleteAll() {
+        $.ajax({
+            url: 'delete_all.php',
+            type: 'post',
+            success: function(result) {
+                alert(result);
+            },
+            error: function() {
+                alert('Error!!!');
+            }
+        });
+    }
+
+    $('#delete-all').click(deleteAll);
 </script>
