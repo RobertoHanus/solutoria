@@ -165,7 +165,7 @@
 
       
     numItems = 0;
-    function addRow(valor, fecha, origen) {
+    function addRow(id, valor, fecha, origen) {
         numItems++;
         $("#table").append(`
                 <tr class="entry">
@@ -178,7 +178,7 @@
                             data-target="#update-register">
                             <i class="fa-sharp fa-solid fa-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-danger">
+                        <button type="button" class="btn btn-danger" onClick="deleteSingle(${id})">
                             <i class="fa-sharp fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -195,7 +195,7 @@
                     $('#table tr.entry').remove();
                     numItems=0;
                     result_parsed.forEach(element => {
-                        addRow(element[0],element[1],element[2]);
+                        addRow(element[0],element[1],element[2],element[3]);
                     });
                 },
                 error: function () {
@@ -220,5 +220,18 @@
         });
     }
 
-    $('#delete-all').click(deleteAll);
+    function deleteSingle(id) {
+        $.ajax({
+            url:'delete_single.php',
+            type: 'post',
+            data: { id : id},
+            success: function(result) {
+                alert(result);
+            },
+            error: function() {
+                alert('Error!!!');
+            }
+        });
+    }
+
 </script>
