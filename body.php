@@ -56,10 +56,11 @@
                     <th scope="col">
                         <button type="button" id="reload" class="btn btn-success">
                             <i class="fa-solid fa-rotate-right"></i>
-                        </button></i>
-                        <button type="button" id="reload" class="btn btn-primary">
+                        </button>
+                        <button type="button" data-toggle="modal" data-target="#chart" class="btn btn-primary"
+                            onClick="updateChart()">
                             <i class="fa-solid fa-eye"></i>
-                        </button></i>
+                        </button>
                     </th>
                 </tr>
             </thead>
@@ -116,6 +117,26 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Descartar</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="chart" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -204,6 +225,8 @@
                 </tr>`);
     };
 
+    chartLabelData = [];
+    chartData = [];
     function updateTableView() {
         $.ajax({
             url: 'select_uf.php',
@@ -213,8 +236,12 @@
                 result_parsed = JSON.parse(result)
                 $('#table tr.entry').remove();
                 numItems = 0;
+                chartLabelData = [];
+                chartData = [];
                 result_parsed.forEach(element => {
                     addRow(element[0], element[1], element[2], element[3]);
+                    chartLabelData.push(element[2]);
+                    chartData.push(element[1]);
                 });
             },
             error: function () {
@@ -287,5 +314,33 @@
 
     $('#datepicker-start').change(updateTableView);
     $('#datepicker-end').change(updateTableView);
+
+    chartObject = null;
+    function updateChart() {
+        const ctx = document.getElementById('myChart');
+
+        if(chartObject!=null) chartObject.destroy();
+
+        chartObject = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartLabelData,
+                datasets: [{
+                    label: 'Valor UF',
+                    data: chartData,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        })
+    }
+
+    
 
 </script>

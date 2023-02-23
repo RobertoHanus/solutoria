@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker.min.css" />
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/fontawesome.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
