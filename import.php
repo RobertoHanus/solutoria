@@ -1,9 +1,16 @@
 <?php
 include('db.php');
 
+$userName = $_POST['userName'];
+
+if($userName == "") {
+    echo "Debe incluir nombre de usuario valido.";
+    return;
+}
+
 $ch = curl_init();
 
-$data = array("userName" => "", "flagJson" => true);
+$data = array("userName" => "$userName", "flagJson" => true);
 
 $postdata = json_encode($data);
 
@@ -22,6 +29,11 @@ $result = curl_exec($ch);
 $decoded = json_decode($result, true);
 
 $token = $decoded['token'];
+
+if(isset($token)==false) {
+    echo "Nombre de usuario invalido";
+    return;
+}
 
 curl_close($ch);
 
@@ -57,5 +69,7 @@ foreach ($decodedData as $row) {
         mysqli_query($conn, $query);
     }
 }
+
+echo "Datos importados!";
 
 ?>

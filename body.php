@@ -4,9 +4,12 @@
         <i class="glyphicon glyphicon-calendar"></i>
     </h1>
     <div class="row border mb-3">
-        <button type="button" class="btn btn-success m-3">Importar Datos</button>
-        <button type="button" class="btn btn-danger m-3" data-toggle="modal" data-target="#erase-confirm">Borrar
-            Todo</button>
+        <input type="text" class="form-control w-25 m-3" id="user-name" name="user-name" placeholder="User name">
+        <div class="input-group-prepend">
+            <button id="importar" type="button" class="btn btn-success m-3">Importar Datos</button>
+            <button type="button" class="btn btn-danger m-3" data-toggle="modal" data-target="#erase-confirm">Borrar
+                Todo</button>
+        </div>
     </div>
     <div class="row border p-3 mb-3">
         <form action="save_task.php" method="POST" id="save_task">
@@ -92,8 +95,8 @@
                     <div class="modal-body">
                         <h4>Actualizar registro historico UF</h4>
                         <div class="form-group">
-                            <input name="valor" id="value-updater" type="number" step="0.01" class="form-control" id="valor-en-pesos"
-                                placeholder="Valor en pesos">
+                            <input name="valor" id="value-updater" type="number" step="0.01" class="form-control"
+                                id="valor-en-pesos" placeholder="Valor en pesos">
                         </div>
                         <div id="datepicker-update" class="input-group date mb-3" data-date-format="dd-mm-yyyy">
                             <input name="date" id="date-updater" class="form-control" type="text" readonly />
@@ -115,20 +118,12 @@
     </div>
 </div>
 
-
-<!--
-<button id="btnAddItem">Add</button>
-<table id="Table">
-</table>
--->
-
-
 <script>
     $(function () {
         $("#datepicker-start").datepicker({
             autoclose: true,
             todayHighlight: true,
-        }).datepicker('update', new Date());
+        }).datepicker('update', new Date('01-01-2000'));
     });
     $(function () {
         $("#datepicker-end").datepicker({
@@ -261,5 +256,21 @@
         $('#date-updater').val(fecha);
         $('#source-updater').val(origen);
     }
+
+    function importData() {
+        $.ajax({
+            url: 'import.php',
+            type: 'post',
+            data: { userName: $('#user-name').val() },
+            success: function (result) {
+                alert(result);
+            },
+            error: function () {
+                alert('Error!!!');
+            }
+        });
+    }
+
+    $('#importar').click(importData);
 
 </script>
