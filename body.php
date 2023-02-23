@@ -152,6 +152,7 @@
                 type: 'post',
                 data: data,
                 success: function (result) {
+                    updateTableView();
                     alert(result);
                 },
                 error: function () {
@@ -168,6 +169,7 @@
                 type: 'post',
                 data: data,
                 success: function (result) {
+                    updateTableView();
                     alert(result);
                 },
                 error: function () {
@@ -226,6 +228,7 @@
             url: 'delete_all.php',
             type: 'post',
             success: function (result) {
+                updateTableView();
                 alert(result);
             },
             error: function () {
@@ -242,6 +245,7 @@
             type: 'post',
             data: { id: id },
             success: function (result) {
+                updateTableView();
                 alert(result);
             },
             error: function () {
@@ -263,6 +267,7 @@
             type: 'post',
             data: { userName: $('#user-name').val() },
             success: function (result) {
+                updateTableView();
                 alert(result);
             },
             error: function () {
@@ -272,5 +277,12 @@
     }
 
     $('#importar').click(importData);
+
+    $(function () {
+        updateTableView();
+    });
+
+    $('#datepicker-start').change(updateTableView);
+    $('#datepicker-end').change(updateTableView);
 
 </script>
