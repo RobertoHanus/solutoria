@@ -9,6 +9,9 @@
             <button id="importar" type="button" class="btn btn-success m-3">Importar Datos</button>
             <button type="button" class="btn btn-danger m-3" data-toggle="modal" data-target="#erase-confirm">Borrar
                 Todo</button>
+            <div id='spinner' class="spinner-border m-3" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
     </div>
     <div class="row border p-3 mb-3">
@@ -292,6 +295,7 @@
     }
 
     function importData() {
+        $('#spinner').show();
         $.ajax({
             url: 'import.php',
             type: 'post',
@@ -299,6 +303,7 @@
             success: function (result) {
                 updateTableView();
                 alert(result);
+                $('#spinner').hide();
             },
             error: function () {
                 alert('Error!!!');
@@ -312,6 +317,10 @@
         updateTableView();
     });
 
+    $(function () {
+        $('#spinner').hide();
+    });
+
     $('#datepicker-start').change(updateTableView);
     $('#datepicker-end').change(updateTableView);
 
@@ -319,7 +328,7 @@
     function updateChart() {
         const ctx = document.getElementById('myChart');
 
-        if(chartObject!=null) chartObject.destroy();
+        if (chartObject != null) chartObject.destroy();
 
         chartObject = new Chart(ctx, {
             type: 'line',
@@ -341,6 +350,6 @@
         })
     }
 
-    
+
 
 </script>
