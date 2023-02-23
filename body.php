@@ -1,8 +1,8 @@
 <div class="container">
     <h1 class="font-weight-bold">
         CRUD e Importador de datos desde API
-        <i class="glyphicon glyphicon-calendar"></i>
     </h1>
+    <h3>Desarrollado por Roberto Arturo Hanus Morales</h3>
     <div class="row border mb-3">
         <input type="text" class="form-control w-25 m-3" id="user-name" name="user-name" placeholder="User name">
         <div class="input-group-prepend">
@@ -55,7 +55,10 @@
                     <th scope="col">Origen</th>
                     <th scope="col">
                         <button type="button" id="reload" class="btn btn-success">
-                            <i class="fa-solid fa-rotate-right"></i></i>
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button></i>
+                        <button type="button" id="reload" class="btn btn-primary">
+                            <i class="fa-solid fa-eye"></i>
                         </button></i>
                     </th>
                 </tr>
