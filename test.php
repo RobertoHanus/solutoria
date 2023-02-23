@@ -1,7 +1,9 @@
 <?php
-$ch  = curl_init();
+include('db.php');
 
-$data = array("userName" => "robertohanus4_94p@indeedemail.com", "flagJson" => true );
+$ch = curl_init();
+
+$data = array("userName" => "", "flagJson" => true);
 
 $postdata = json_encode($data);
 
@@ -11,9 +13,9 @@ $options = [
     CURLOPT_HTTPHEADER => ["Accept: application/json", "Content-Type: application/json"],
     CURLOPT_POSTFIELDS => $postdata,
     CURLOPT_RETURNTRANSFER => true
- ];
+];
 
- curl_setopt_array($ch, $options);
+curl_setopt_array($ch, $options);
 
 $result = curl_exec($ch);
 
@@ -23,14 +25,14 @@ $token = $decoded['token'];
 
 curl_close($ch);
 
-$ch  = curl_init();
+$ch = curl_init();
 
 $options = [
     CURLOPT_URL => 'https://postulaciones.solutoria.cl/api/indicadores',
     CURLOPT_POST => false,
     CURLOPT_HTTPHEADER => ["Accept: application/json", "Content-Type: application/json", "Authorization: Bearer $token"],
     CURLOPT_RETURNTRANSFER => true
- ];
+];
 
 curl_setopt_array($ch, $options);
 
@@ -38,11 +40,22 @@ $resultData = curl_exec($ch);
 
 $decodedData = json_decode($resultData, true);
 
-// var_dump($decodedData[0]);
+curl_close($ch);
 
-foreach($decodedData as $row) {
-    if($row['codigoIndicador'] == "UF") var_dump($row);
+$valor = 0;
+$fecha = '';
+$origen = '';
+
+foreach ($decodedData as $row) {
+    if ($row['codigoIndicador'] == "UF") {
+        $valor = $row['valorIndicador'];
+        $fecha = $row['fechaIndicador'];
+        $origen = $row['origenIndicador'];   
+
+        $query = "INSERT INTO uf_entries(id,valor,fecha,origen) VALUES (NULL,$valor,'$fecha','$origen');";
+
+        mysqli_query($conn, $query);
+    }
 }
 
-curl_close($ch);
 ?>
